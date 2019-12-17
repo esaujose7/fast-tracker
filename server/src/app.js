@@ -1,11 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const config = require("./config");
-
-if (config.env === "local")
-  AWS.config.dynamodb = { endpoint: "http://localstack:4569" };
-
 const router = require("./router");
 const app = express();
 
