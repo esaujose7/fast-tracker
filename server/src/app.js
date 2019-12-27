@@ -10,13 +10,6 @@ app.use(cors());
 // JSON parsing
 app.use(bodyParser.json());
 
-// Other request types parsing
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
-
 // Remove express header
 app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");

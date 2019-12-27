@@ -1,25 +1,25 @@
-const User = require("../models/user");
+const { User } = require("../models/user");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
-class UsersController {
-  static async register(req, res) {
+
+class AuthController {
+  static async login(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
 
-    const { firstName, lastName, email, password } = req.body;
+    const { email, password } = req.body;
 
     try {
       let user = await User.findOne({ where: { email } });
+      console.log(user);
+      if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
-      if (user) return res.status(400).json({ msg: "User already exists." });
+      const isMatch = await bcrypt.compare(password, user.password);
 
-      user = User.build({ firstName, lastName, email, password });
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
+      if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-      await user.save();
       const payload = {
         user: { id: user.id }
       };
@@ -35,11 +35,11 @@ class UsersController {
           res.json({ token });
         }
       );
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error.message);
       res.status(500).send("Server Error");
     }
   }
 }
 
-module.exports = UsersController;
+module.exports = AuthController;

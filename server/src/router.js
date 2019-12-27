@@ -1,11 +1,14 @@
 const express = require("express");
 
 const usersController = require("./controllers/users.controller");
+const authController = require("./controllers/auth.controller");
+
 const router = express.Router();
 
-const version = "v1";
+// Users resource
+router.post(`/users`, usersController.register);
 
-/* Routes */
-router.use(`/${version}/test`, usersController.test);
+// Authentication
+router.post("/auth", authController.login);
 
 module.exports = router;
