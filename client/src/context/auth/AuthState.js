@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
-import setAuthToken from "../../utils/setAuthToken";
+import { LOGIN, LOAD_USER } from "../types";
 
 const AuthState = props => {
   const initialState = {
     token: localStorage.getItem("token"),
-    isAuthenticated: null,
+    isAuthenticated: false,
     loading: true,
     error: null,
     user: null
@@ -14,78 +14,43 @@ const AuthState = props => {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Load User
   const loadUser = async () => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-    try {
-      const res = await axios.get("/api/auth");
-
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data
-      });
-    } catch (error) {
-      dispatch({ type: AUTH_ERROR });
-    }
-  };
-
-  // Register User
-  const register = async formData => {
-    const config = {
+    const response = await fetch("http://localhost:3001/users", {
       headers: {
-        "Content-Type": "application/json"
+        Authorization: state.token
       }
-    };
+    });
 
-    try {
-      const res = await axios.post("/api/users", formData, config);
+    if (!response.ok) return { msg: "Error fetching shit" };
 
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data
-      });
+    const { user } = await response.json();
 
-      loadUser();
-    } catch (error) {
-      dispatch({
-        type: REGISTER_FAIL,
-        payload: error.response.data.msg
-      });
-    }
+    dispatch({ type: LOAD_USER, payload: user });
   };
 
-  // Login User
   const login = async formData => {
-    const config = {
+    const response = await fetch("http://localhost:3001/auth", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (!response.ok) return { msg: "Error fetching shit" };
+
+    const data = await response.json();
+    const { token, user } = data;
+
+    localStorage.setItem("token", token);
+    dispatch({
+      type: LOGIN,
+      payload: {
+        token,
+        user
       }
-    };
-
-    try {
-      const res = await axios.post("/api/auth", formData, config);
-
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data
-      });
-
-      loadUser();
-    } catch (error) {
-      dispatch({
-        type: LOGIN_FAIL,
-        payload: error.response.data.msg
-      });
-    }
+    });
   };
-
-  // Logout
-  const logout = () => dispatch({ type: LOGOUT });
-
-  // Clear Errors
-  const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
 
   return (
     <AuthContext.Provider
@@ -95,11 +60,8 @@ const AuthState = props => {
         loading: state.loading,
         user: state.user,
         error: state.error,
-        register,
-        loadUser,
         login,
-        logout,
-        clearErrors
+        loadUser
       }}
     >
       {props.children}

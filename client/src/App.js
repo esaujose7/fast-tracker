@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
+
+import Init from "./components/Init";
+
+import AuthState from "./context/auth/AuthState";
 
 function App() {
-  return <h1>hola</h1>;
+  return (
+    <AuthState>
+      <Init />
+    </AuthState>
+  );
 }
 
 export default App;
