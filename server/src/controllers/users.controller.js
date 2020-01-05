@@ -1,21 +1,20 @@
 const User = require("../models/user");
-const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config");
+
 class UsersController {
   static async register(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({ errors: errors.array() });
-
     const { firstName, lastName, email, password } = req.body;
 
+    if (!firstName || !lastName || !email || !password)
+      return res.status(400).json({ msg: "Invalid body." });
     try {
       let user = await User.findOne({ where: { email } });
 
       if (user) return res.status(400).json({ msg: "User already exists." });
 
-      user = User.build({ firstName, lastName, email, password });
+      user = User.build({ firstName, lastName, email });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
 
@@ -26,13 +25,13 @@ class UsersController {
 
       JWT.sign(
         payload,
-        "shh",
+        JWT_SECRET,
         {
           expiresIn: 360000
         },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.status(201).json({ token });
         }
       );
     } catch (err) {

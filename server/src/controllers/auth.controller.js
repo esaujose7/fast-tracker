@@ -1,19 +1,19 @@
-const { User } = require("../models/user");
-const { validationResult } = require("express-validator");
+const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config");
 
 class AuthController {
   static async login(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({ errors: errors.array() });
-
     const { email, password } = req.body;
+
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ errors: "Please provide an email and password." });
 
     try {
       let user = await User.findOne({ where: { email } });
-      console.log(user);
       if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -26,7 +26,7 @@ class AuthController {
 
       JWT.sign(
         payload,
-        "shh",
+        JWT_SECRET,
         {
           expiresIn: 360000
         },

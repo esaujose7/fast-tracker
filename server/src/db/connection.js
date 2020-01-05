@@ -1,9 +1,17 @@
 const Sequelize = require("sequelize");
 
-const connection = new Sequelize("fast_tracker", "dev", "123456", {
-  host: "localhost",
+const {
+  MYSQL_HOST,
+  MYSQL_PORT,
+  MYSQL_USER,
+  MYSQL_PASS,
+  MYSQL_DB
+} = require("../config");
+
+const connection = new Sequelize(MYSQL_DB, MYSQL_USER, MYSQL_PASS, {
+  host: MYSQL_HOST,
   dialect: "mysql",
-  port: "3306"
+  port: MYSQL_PORT
 });
 
 module.exports = connection;
