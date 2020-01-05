@@ -48,7 +48,7 @@ class FastingsController {
       const { id } = req.params;
       const fast = await Fasting.findOne({ where: { id } });
       if (!fast) {
-        throw Error(`Job not updated. id: ${id}`);
+        throw Error(`Fasting not updated. id: ${id}`);
       }
 
       fast.ongoing = false;
