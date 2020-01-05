@@ -1,5 +1,7 @@
-const PORT_NUMBER = 3000;
+const config = require("./config");
 const app = require("./app");
+
+const { PORT_NUMBER } = config;
 
 app.use((req, res) => {
   res.status(404);
