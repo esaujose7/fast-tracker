@@ -9,6 +9,7 @@ const router = express.Router();
 
 // Users resource
 router.post("/users", usersController.register);
+router.get("/users", auth, usersController.getUser);
 
 // Authentication
 router.post("/auth", authController.login);

@@ -32,7 +32,7 @@ class AuthController {
         },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ token, user });
         }
       );
     } catch (error) {

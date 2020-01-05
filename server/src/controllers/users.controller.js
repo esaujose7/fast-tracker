@@ -4,6 +4,21 @@ const JWT = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 
 class UsersController {
+  static async getUser(req, res) {
+    try {
+      const user = await User.findByPk(req.user.id);
+      if (!user)
+        return res
+          .status(400)
+          .json({ msg: "User doesn't exist for this token." });
+
+      res.json({ user });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server Error");
+    }
+  }
+
   static async register(req, res) {
     const { firstName, lastName, email, password } = req.body;
 
