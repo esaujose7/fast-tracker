@@ -1,4 +1,4 @@
-import { LOGIN, LOAD_USER } from "../types";
+import { LOGIN_SUCCESS, LOAD_USER } from "../types";
 
 export default (state, action) => {
   switch (action.type) {
@@ -6,9 +6,10 @@ export default (state, action) => {
       return {
         ...state,
         ...action.payload,
-        isAuthenticated: true
+        isAuthenticated: true,
+        loading: false
       };
-    case LOGIN:
+    case LOGIN_SUCCESS:
       return {
         ...state,
         ...action.payload,

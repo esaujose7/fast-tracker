@@ -1,13 +1,11 @@
 import React, { useContext, useEffect } from "react";
-import AuthContext from "../../context/auth/authContext";
 import Login from "../Login";
+import Dashboard from "../Dashboard";
 
 import authContext from "../../context/auth/authContext";
 
 const Init = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-
-  const { loadUser } = useContext(authContext);
+  const { loading, isAuthenticated, loadUser } = useContext(authContext);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -15,7 +13,9 @@ const Init = () => {
     loadUser();
   }, []);
 
-  return isAuthenticated ? <div>jej</div> : <Login />;
+  if (loading) return <div>Loading...</div>;
+
+  return isAuthenticated ? <Dashboard /> : <Login />;
 };
 
 export default Init;

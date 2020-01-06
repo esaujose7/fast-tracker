@@ -1,13 +1,16 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 
 import Init from "./components/Init";
 
 import AuthState from "./context/auth/AuthState";
+import FastingState from "./context/fastings/FastingState";
 
 function App() {
   return (
     <AuthState>
-      <Init />
+      <FastingState>
+        <Init />
+      </FastingState>
     </AuthState>
   );
 }

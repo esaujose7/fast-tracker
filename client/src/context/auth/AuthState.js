@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
-import { LOGIN, LOAD_USER } from "../types";
+import { LOGIN_SUCCESS, LOAD_USER } from "../types";
 
 const AuthState = props => {
   const initialState = {
@@ -44,7 +44,7 @@ const AuthState = props => {
 
     localStorage.setItem("token", token);
     dispatch({
-      type: LOGIN,
+      type: LOGIN_SUCCESS,
       payload: {
         token,
         user
