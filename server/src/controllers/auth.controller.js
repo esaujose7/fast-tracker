@@ -12,7 +12,9 @@ class AuthController {
         .json({ errors: "Please provide an email and password." });
 
     try {
-      const user = await User.findOne({ where: { email } });
+      const user = await User.scope("withPassword").findOne({
+        where: { email }
+      });
       if (!user)
         return res.status(400).json({ msg: "This user doesn't exist." });
 

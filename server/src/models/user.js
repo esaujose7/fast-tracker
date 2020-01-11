@@ -9,7 +9,18 @@ User.init(
     email: DataTypes.STRING,
     password: DataTypes.STRING
   },
-  { sequelize, modelName: "Users" }
+  {
+    sequelize,
+    modelName: "Users",
+    defaultScope: {
+      attributes: { exclude: ["password"] }
+    },
+    scopes: {
+      withPassword: {
+        attributes: {}
+      }
+    }
+  }
 );
 
 module.exports = User;
