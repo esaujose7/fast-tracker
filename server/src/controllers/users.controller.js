@@ -1,6 +1,6 @@
 const User = require("../models/user");
-const bcrypt = require("bcryptjs");
-const { createToken } = require("../helpers");
+const { createToken, hashPassword } = require("../helpers");
+
 class UsersController {
   static async loadUser(req, res) {
     try {
@@ -27,9 +27,13 @@ class UsersController {
       if (await User.findOne({ where: { email } }))
         return res.status(400).json({ msg: "User already exists." });
 
-      const user = User.build({ firstName, lastName, email });
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
+      const hashedPassword = await hashPassword(password);
+      const user = User.build({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword
+      });
       await user.save();
 
       const token = await createToken({

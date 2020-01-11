@@ -6,10 +6,10 @@ class FastingsController {
       const fastings = await Fasting.findAll({
         where: { userId: req.user.id }
       });
-      res.status(200).json(fastings);
+      return res.status(200).json(fastings);
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 
@@ -27,7 +27,7 @@ class FastingsController {
         .json({ msg: "This user has not started a fasting yet." });
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 
@@ -38,7 +38,7 @@ class FastingsController {
       return res.status(200).json(startedFast);
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 

@@ -1,5 +1,6 @@
 const { JWT_SECRET } = require("./config");
 const JWT = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 function createToken(payload) {
   return new Promise((resolve, reject) => {
@@ -17,6 +18,13 @@ function createToken(payload) {
   });
 }
 
+async function hashPassword() {
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(password, salt);
+  return password;
+}
+
 module.exports = {
-  createToken
+  createToken,
+  hashPassword
 };
