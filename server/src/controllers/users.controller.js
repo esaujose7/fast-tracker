@@ -1,10 +1,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const JWT = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config");
-
+const { createToken } = require("../helpers");
 class UsersController {
-  static async getUser(req, res) {
+  static async loadUser(req, res) {
     try {
       const user = await User.findByPk(req.user.id);
       if (!user)
@@ -12,10 +10,10 @@ class UsersController {
           .status(400)
           .json({ msg: "User doesn't exist for this token." });
 
-      res.json({ user });
+      return res.json({ user });
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 
@@ -24,34 +22,24 @@ class UsersController {
 
     if (!firstName || !lastName || !email || !password)
       return res.status(400).json({ msg: "Invalid body." });
+
     try {
-      let user = await User.findOne({ where: { email } });
+      if (await User.findOne({ where: { email } }))
+        return res.status(400).json({ msg: "User already exists." });
 
-      if (user) return res.status(400).json({ msg: "User already exists." });
-
-      user = User.build({ firstName, lastName, email });
+      const user = User.build({ firstName, lastName, email });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
-
       await user.save();
-      const payload = {
-        user: { id: user.id }
-      };
 
-      JWT.sign(
-        payload,
-        JWT_SECRET,
-        {
-          expiresIn: 360000
-        },
-        (err, token) => {
-          if (err) throw err;
-          res.status(201).json({ token });
-        }
-      );
+      const token = await createToken({
+        user: { id: user.id }
+      });
+
+      return res.status(201).json({ token });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 }
