@@ -25,7 +25,6 @@ class AuthController {
         user: { id: user.id }
       });
 
-      console.log(token);
       res.json({ token, user });
     } catch (error) {
       console.error(error.message);
