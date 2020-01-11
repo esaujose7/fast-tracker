@@ -1,7 +1,5 @@
-const config = require("./config");
+const { PORT_NUMBER } = require("./config");
 const app = require("./app");
-
-const { PORT_NUMBER } = config;
 
 app.use((req, res) => {
   res.status(404);
