@@ -12,7 +12,7 @@ const required = [
   "MYSQL_PORT"
 ];
 
-let config = {};
+const config = {};
 
 required.forEach(param => {
   if (!process.env[param]) {
