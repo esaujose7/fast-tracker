@@ -1,7 +1,13 @@
 import React, { useReducer } from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
-import { LOGIN_SUCCESS, LOAD_USER } from "../types";
+import {
+  LOGIN_SUCCESS,
+  LOAD_USER,
+  FAILED_AUTHENTICATION,
+  FAILED_LOAD_USER,
+  LOGOUT
+} from "../types";
 
 const AuthState = props => {
   const initialState = {
@@ -14,6 +20,7 @@ const AuthState = props => {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  // This is only triggered if there is a token in the localStorage
   const loadUser = async () => {
     const response = await fetch("http://localhost:3001/users", {
       headers: {
@@ -21,7 +28,11 @@ const AuthState = props => {
       }
     });
 
-    if (!response.ok) return { msg: "Error fetching shit" };
+    // It may fails if the token expires
+    if (!response.ok) {
+      localStorage.removeItem("token");
+      return dispatch({ type: FAILED_LOAD_USER });
+    }
 
     const { user } = await response.json();
 
@@ -37,10 +48,9 @@ const AuthState = props => {
       body: JSON.stringify(formData)
     });
 
-    if (!response.ok) return { msg: "Error fetching shit" };
+    if (!response.ok) return dispatch({ type: FAILED_AUTHENTICATION });
 
-    const data = await response.json();
-    const { token, user } = data;
+    const { token, user } = await response.json();
 
     localStorage.setItem("token", token);
     dispatch({
@@ -52,6 +62,11 @@ const AuthState = props => {
     });
   };
 
+  const logout = async () => {
+    localStorage.removeItem("token");
+    dispatch({ type: LOGOUT });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -61,7 +76,8 @@ const AuthState = props => {
         user: state.user,
         error: state.error,
         login,
-        loadUser
+        loadUser,
+        logout
       }}
     >
       {props.children}

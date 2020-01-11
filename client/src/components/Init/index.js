@@ -8,14 +8,16 @@ const Init = () => {
   const { loading, isAuthenticated, loadUser } = useContext(authContext);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
     loadUser();
   }, []);
 
   if (loading) return <div>Loading...</div>;
 
-  return isAuthenticated ? <Dashboard /> : <Login />;
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  return <Dashboard />;
 };
 
 export default Init;

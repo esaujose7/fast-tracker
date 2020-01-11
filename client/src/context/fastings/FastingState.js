@@ -19,10 +19,10 @@ const AuthState = props => {
       }
     });
 
-    if (!response.ok) dispatch({ type: FAILED_FETCHING_FASTINGS });
+    if (!response.ok) return dispatch({ type: FAILED_FETCHING_FASTINGS });
 
     const payload = await response.json();
-    dispatch({ type: FETCH_FASTINGS, payload });
+    return dispatch({ type: FETCH_FASTINGS, payload });
   };
 
   return (
