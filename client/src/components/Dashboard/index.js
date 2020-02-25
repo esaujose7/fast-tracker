@@ -21,15 +21,24 @@ const Dashboard = () => {
 
   return (
     <div>
-      <a href="#!" onClick={() => logout()}>
+      <button onClick={() => logout()}>
         Logout
-      </a>
+      </button>
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
           <h1>Fastings</h1>
-          {fastings.map(fasting => {
-            return <h3 key={fasting.id}>{JSON.stringify(fasting, null, 2)}</h3>;
-          })}
+          Your last fastings were:
+          <ol>
+            {fastings.map(({ id, ongoing, createdAt, updatedAt }) => {
+              return (
+                // Fasting item
+                <li key={id} style={{ display: 'flex', flexDirection: 'column' }}>
+                  Started: {createdAt}
+                  Finished: {updatedAt}
+                </li>
+              );
+            })}
+          </ol>
         </div>
         <div>
           <h1>Last Fast</h1>
