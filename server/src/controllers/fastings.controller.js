@@ -35,7 +35,7 @@ class FastingsController {
     try {
       const startedFast = await Fasting.create({ userId: req.user.id });
 
-      return res.status(200).json(startedFast);
+      return res.status(201).json(startedFast);
     } catch (error) {
       console.error(error.message);
       return res.status(500).send("Server Error");
