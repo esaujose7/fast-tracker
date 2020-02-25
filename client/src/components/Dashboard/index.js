@@ -35,6 +35,7 @@ const Dashboard = () => {
                 <li key={id} style={{ display: 'flex', flexDirection: 'column' }}>
                   Started: {createdAt}
                   Finished: {updatedAt}
+                  Ongoing: {ongoing ? "Yep" : "Nope"}
                 </li>
               );
             })}

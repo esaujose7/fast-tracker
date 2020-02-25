@@ -31,6 +31,7 @@ const AuthState = props => {
     dispatch({ type: START_LOADING });
 
     const response = await fetch("http://localhost:3001/fastings", {
+      method: "POST",
       headers: {
         Authorization: localStorage.getItem("token")
       }
@@ -46,6 +47,7 @@ const AuthState = props => {
     dispatch({ type: START_LOADING });
 
     const response = await fetch(`http://localhost:3001/fastings/${id}`, {
+      method: "PUT",
       headers: {
         Authorization: localStorage.getItem("token")
       }
