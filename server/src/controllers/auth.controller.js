@@ -21,7 +21,7 @@ class AuthController {
       const isCorrectPassword = await bcrypt.compare(password, user.password);
 
       if (!isCorrectPassword)
-        return res.status(400).json({ msg: "Incorrect password." });
+        return res.status(401).json({ msg: "Incorrect password." });
 
       const token = await createToken({
         user: { id: user.id }
