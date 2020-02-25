@@ -3,7 +3,8 @@ import {
   LOAD_USER,
   FAILED_LOAD_USER,
   FAILED_AUTHENTICATION,
-  LOGOUT
+  LOGOUT,
+  CLEAR_ERRORS
 } from "../types";
 
 export default (state, action) => {
@@ -27,14 +28,14 @@ export default (state, action) => {
         ...state,
         loading: false,
         token: null,
-        error: "Couldn't login."
+        error: action.payload
       };
     case FAILED_LOAD_USER:
       return {
         ...state,
         loading: false,
         token: null,
-        error: "Couldn't authenticate."
+        error: null
       };
     case LOGOUT: {
       return {
@@ -42,6 +43,12 @@ export default (state, action) => {
         user: null,
         token: null,
         isAuthenticated: false
+      };
+    }
+    case CLEAR_ERRORS: {
+      return {
+        ...state,
+        error: null
       };
     }
     default:
