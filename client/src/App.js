@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
 
-import Init from "./components/Init";
-
-import AuthState from "./context/auth/AuthState";
-import FastingState from "./context/fastings/FastingState";
+import authContext from "./context/auth/authContext";
 
 function App() {
-  return (
-    <AuthState>
-      <FastingState>
-        <Init />
-      </FastingState>
-    </AuthState>
-  );
+  const { loading, isAuthenticated, loadUser } = useContext(authContext);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  return <Dashboard />;
 }
 
 export default App;

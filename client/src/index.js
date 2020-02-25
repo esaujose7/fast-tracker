@@ -2,4 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import AuthState from "./context/auth/AuthState";
+import FastingState from "./context/fastings/FastingState";
+
+ReactDOM.render(
+  <AuthState>
+    <FastingState>
+      <App />
+    </FastingState>
+  </AuthState>
+  , document.getElementById("root"));
