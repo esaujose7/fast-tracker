@@ -6,7 +6,8 @@ import {
   LOAD_USER,
   FAILED_AUTHENTICATION,
   FAILED_LOAD_USER,
-  LOGOUT
+  LOGOUT,
+  CLEAR_ERRORS
 } from "../types";
 
 const AuthState = props => {
@@ -20,7 +21,7 @@ const AuthState = props => {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // This is only triggered if there is a token in the localStorage
+  // This is triggered when the app mounts, to load the user with the token and proceed to fast page or login page
   const loadUser = async () => {
     const response = await fetch("http://localhost:3001/users", {
       headers: {
@@ -28,7 +29,7 @@ const AuthState = props => {
       }
     });
 
-    // It may fails if the token expires
+    // It may fails if the token expires/not available in localStorage
     if (!response.ok) {
       localStorage.removeItem("token");
       return dispatch({ type: FAILED_LOAD_USER });
@@ -47,10 +48,14 @@ const AuthState = props => {
       },
       body: JSON.stringify(formData)
     });
+    const data = await response.json();
 
-    if (!response.ok) return dispatch({ type: FAILED_AUTHENTICATION });
+    if (!response.ok) {
+      setTimeout(() => dispatch({ type: CLEAR_ERRORS }), 5000);
+      return dispatch({ type: FAILED_AUTHENTICATION, payload: data.msg });
+    }
 
-    const { token, user } = await response.json();
+    const { token, user } = data;
 
     localStorage.setItem("token", token);
     dispatch({
