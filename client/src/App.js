@@ -1,11 +1,18 @@
 import React, { useContext, useEffect } from "react";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 import authContext from "./context/auth/authContext";
+import NavigationBar from "./components/Navbar";
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  const { loading, isAuthenticated, loadUser } = useContext(authContext);
+  const { loading, loadUser } = useContext(authContext);
 
   useEffect(() => {
     loadUser();
@@ -13,11 +20,21 @@ function App() {
 
   if (loading) return <div>Loading...</div>;
 
-  if (!isAuthenticated) {
-    return <Login />;
-  }
-
-  return <Dashboard />;
+  return (
+    <Router>
+      <NavigationBar />
+      <Switch>
+        <Route>
+          <PrivateRoute path="/" exact >
+            <Dashboard />
+          </ PrivateRoute>
+          <Route path="/login" exact >
+            <Login />
+          </Route>
+        </Route>
+      </Switch>
+    </Router>
+  );
 }
 
 export default App;
