@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../../context/auth/authContext";
-import ErrorsMessages from "../ErrorsMessages";
+import ErrorsMessages from "../../components/ErrorsMessages";
+import { Redirect } from 'react-router-dom';
 
 const Login = () => {
-  const { login, error } = useContext(AuthContext);
+  const { login, error, isAuthenticated } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { email, password } = formData;
@@ -19,6 +20,10 @@ const Login = () => {
   };
 
   const isLoginAvailable = () => Object.values(formData).some(value => value === "");
+
+  if (isAuthenticated) {
+    return (<Redirect to={{ pathname: "/" }}/>);
+  }
 
   return (
     <>
