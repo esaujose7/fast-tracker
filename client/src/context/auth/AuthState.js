@@ -10,15 +10,15 @@ import {
   CLEAR_ERRORS
 } from "../types";
 
-const AuthState = props => {
-  const initialState = {
-    token: localStorage.getItem("token"),
-    isAuthenticated: false,
-    loading: true,
-    error: null,
-    user: null
-  };
+const initialState = {
+  token: localStorage.getItem("token"),
+  isAuthenticated: false,
+  loading: true,
+  error: null,
+  user: null
+};
 
+const AuthState = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // This is triggered when the app mounts, to load the user with the token and proceed to fast page or login page
@@ -72,6 +72,33 @@ const AuthState = props => {
     dispatch({ type: LOGOUT });
   };
 
+  const register = async userData => {
+    const response = await fetch("http://localhost:3001/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userData)
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      setTimeout(() => dispatch({ type: CLEAR_ERRORS }), 5000);
+      return dispatch({ type: FAILED_AUTHENTICATION, payload: data.msg });
+    }
+
+    const { token, user } = data;
+
+    localStorage.setItem("token", token);
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: {
+        token,
+        user
+      }
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -82,10 +109,11 @@ const AuthState = props => {
         error: state.error,
         login,
         loadUser,
-        logout
+        logout,
+        register
       }}
     >
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 };

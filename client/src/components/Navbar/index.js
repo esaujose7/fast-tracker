@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
+import { Link } from "react-router-dom";
 
 const StyledNav = styled.nav`
   width: 100%;
@@ -12,6 +13,7 @@ const NavigationBar = () => {
       <ul>
         <li>Home</li>
         <li>About</li>
+        <Link to="/register">Register</Link>
       </ul>
     </StyledNav>
   )
