@@ -1,9 +1,9 @@
 const express = require("express");
 const auth = require("./middleware/auth");
 
-const usersController = require("./controllers/users.controller");
-const authController = require("./controllers/auth.controller");
-const fastingsController = require("./controllers/fastings.controller");
+const usersController = require("./controllers/users");
+const authController = require("./controllers/auth");
+const fastingsController = require("./controllers/fastings");
 
 const router = express.Router();
 
