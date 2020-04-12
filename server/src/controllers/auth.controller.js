@@ -13,7 +13,8 @@ class AuthController {
 
     try {
       const user = await User.scope("withPassword").findOne({
-        where: { email }
+        where: { email },
+        raw: true
       });
       if (!user)
         return res.status(400).json({ msg: "This user doesn't exist." });
@@ -26,6 +27,7 @@ class AuthController {
       const token = await createToken({
         user: { id: user.id }
       });
+      delete user.password;
 
       res.json({ token, user });
     } catch (error) {
