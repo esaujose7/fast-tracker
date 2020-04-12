@@ -1,6 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,6 +8,10 @@ import {
 import authContext from "./context/auth/authContext";
 import NavigationBar from "./components/Navbar";
 import PrivateRoute from './components/PrivateRoute';
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const { loading, loadUser } = useContext(authContext);
@@ -30,6 +32,9 @@ function App() {
           </ PrivateRoute>
           <Route path="/login" exact >
             <Login />
+          </Route>
+          <Route path="/register" exact >
+            <Register />
           </Route>
         </Route>
       </Switch>
