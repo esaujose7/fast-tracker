@@ -18,10 +18,10 @@ function createToken(payload) {
   });
 }
 
-async function hashPassword() {
+async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash(password, salt);
-  return password;
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
 }
 
 module.exports = {
