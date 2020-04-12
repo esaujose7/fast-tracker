@@ -28,14 +28,15 @@ class UsersController {
         return res.status(400).json({ msg: "User already exists." });
 
       const hashedPassword = await hashPassword(password);
+
       const user = User.build({
         firstName,
         lastName,
         email,
         password: hashedPassword
       });
-      await user.save();
 
+      await user.save();
       const token = await createToken({
         user: { id: user.id }
       });
@@ -43,7 +44,7 @@ class UsersController {
       return res.status(201).json({ token });
     } catch (err) {
       console.error(err.message);
-      return res.status(500).send("Server Error");
+      return res.status(500).send({msg: err.message});
     }
   }
 }
