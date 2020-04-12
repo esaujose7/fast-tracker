@@ -4,16 +4,16 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-
-import { FastingContextProvider } from "./context/fastings/context";
-import AuthContext from "./context/auth/context";
-
-import NavigationBar from "./components/Navbar";
-import PrivateRoute from './components/PrivateRoute';
+import './style.scss';
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+
+import { FastingContextProvider } from "./context/fastings/context";
+import AuthContext from "./context/auth/context";
+import NavigationBar from "./components/Navbar";
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const { loading, loadUser } = useContext(AuthContext);
