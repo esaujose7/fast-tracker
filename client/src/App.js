@@ -5,7 +5,9 @@ import {
   Route
 } from "react-router-dom";
 
+import { FastingContextProvider } from "./context/fastings/context";
 import AuthContext from "./context/auth/context";
+
 import NavigationBar from "./components/Navbar";
 import PrivateRoute from './components/PrivateRoute';
 
@@ -27,13 +29,15 @@ function App() {
       <NavigationBar />
       <Switch>
         <Route>
-          <PrivateRoute path="/" exact >
-            <Dashboard />
-          </PrivateRoute>
-          <Route path="/login" exact >
+          <FastingContextProvider>
+            <PrivateRoute path="/" exact>
+              <Dashboard />
+            </PrivateRoute>
+          </FastingContextProvider>
+          <Route path="/login" exact>
             <Login />
           </Route>
-          <Route path="/register" exact >
+          <Route path="/register" exact>
             <Register />
           </Route>
         </Route>
