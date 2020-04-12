@@ -1,16 +1,17 @@
-import React, { useReducer } from "react";
-import FastingContext from "./fastingContext";
-import fastingReducer from "./fastingReducer";
+import React, { useReducer, createContext } from "react";
+import reducer from "./reducer";
 import { FETCH_FASTINGS, START_FASTING, STOPPED_FASTING, START_LOADING, FAILED_FETCHING_FASTINGS, FAILED_START_FASTING, FAILED_STOPPED_FASTING } from "../types";
 
-const AuthState = props => {
-  const initialState = {
-    fastings: [],
-    lastFast: null,
-    loading: true
-  };
+const FastingContext = createContext();
 
-  const [state, dispatch] = useReducer(fastingReducer, initialState);
+const initialState = {
+  fastings: [],
+  lastFast: null,
+  loading: true
+};
+
+const FastingContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const getFastings = async () => {
     dispatch({ type: START_LOADING });
@@ -70,9 +71,9 @@ const AuthState = props => {
         stopFasting
       }}
     >
-      {props.children}
+      {children}
     </FastingContext.Provider>
   );
 };
 
-export default AuthState;
+export { FastingContextProvider, FastingContext as default };

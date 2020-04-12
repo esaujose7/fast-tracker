@@ -3,14 +3,14 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { Normalize } from 'styled-normalize'
 
-import AuthState from "./context/auth/AuthState";
-import FastingState from "./context/fastings/FastingState";
+import { AuthContextProvider } from "./context/auth/context";
+import { FastingContextProvider } from "./context/fastings/context";
 
 ReactDOM.render(
-  <AuthState>
-    <FastingState>
+  <AuthContextProvider>
+    <FastingContextProvider>
       <Normalize />
       <App />
-    </FastingState>
-  </AuthState>
+    </FastingContextProvider>
+  </AuthContextProvider>
   , document.getElementById("root"));

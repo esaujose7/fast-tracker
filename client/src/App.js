@@ -5,7 +5,7 @@ import {
   Route
 } from "react-router-dom";
 
-import authContext from "./context/auth/authContext";
+import AuthContext from "./context/auth/context";
 import NavigationBar from "./components/Navbar";
 import PrivateRoute from './components/PrivateRoute';
 
@@ -14,7 +14,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const { loading, loadUser } = useContext(authContext);
+  const { loading, loadUser } = useContext(AuthContext);
 
   useEffect(() => {
     loadUser();
@@ -29,7 +29,7 @@ function App() {
         <Route>
           <PrivateRoute path="/" exact >
             <Dashboard />
-          </ PrivateRoute>
+          </PrivateRoute>
           <Route path="/login" exact >
             <Login />
           </Route>

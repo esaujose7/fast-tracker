@@ -3,8 +3,8 @@ import React, { useContext, useEffect } from "react";
 import FastingsForm from "../../components/FastingsForm";
 import FastingItem from "../../components/FastingItem";
 
-import FastingContext from "../../context/fastings/fastingContext";
-import AuthContext from "../../context/auth/authContext";
+import FastingContext from "../../context/fastings/context";
+import AuthContext from "../../context/auth/context";
 
 const Dashboard = () => {
   const { fastings, loading, lastFast, getFastings } = useContext(

@@ -1,6 +1,5 @@
-import React, { useReducer } from "react";
-import AuthContext from "./authContext";
-import authReducer from "./authReducer";
+import React, { useReducer, createContext } from "react";
+import reducer from "./reducer";
 import {
   LOGIN_SUCCESS,
   LOAD_USER,
@@ -10,6 +9,8 @@ import {
   CLEAR_ERRORS
 } from "../types";
 
+const AuthContext = createContext();
+
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: false,
@@ -18,8 +19,8 @@ const initialState = {
   user: null
 };
 
-const AuthState = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, initialState);
+const AuthContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   // This is triggered when the app mounts, to load the user with the token and proceed to fast page or login page
   const loadUser = async () => {
@@ -118,4 +119,4 @@ const AuthState = ({ children }) => {
   );
 };
 
-export default AuthState;
+export { AuthContextProvider, AuthContext as default };

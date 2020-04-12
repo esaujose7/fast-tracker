@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import FastingContext from "../../context/fastings/fastingContext";
+import FastingContext from "../../context/fastings/context";
 
 const FastingsForm = () => {
   const { startFasting, stopFasting, lastFast } = useContext(FastingContext);

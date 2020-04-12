@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import authContext from '../../context/auth/authContext';
+import authContext from '../../context/auth/context';
 import ErrorMessages from '../../components/ErrorsMessages';
 import { Redirect } from 'react-router-dom';
 
