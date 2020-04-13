@@ -44,7 +44,7 @@ const Register = () => {
         <label htmlFor="password">Password</label>
         <input type="password" name="password" id="password" value={password} onChange={onChange}/>
 
-        <input type="submit" value="Submit" disabled={isRegisterAvailable}/>
+        <input type="submit" value="Submit" disabled={isRegisterAvailable()}/>
       </form>
     </>
   )

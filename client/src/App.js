@@ -28,19 +28,17 @@ function App() {
     <Router>
       <NavigationBar />
       <Switch>
-        <Route>
-          <FastingContextProvider>
-            <PrivateRoute path="/" exact>
-              <Dashboard />
-            </PrivateRoute>
-          </FastingContextProvider>
-          <Route path="/login" exact>
-            <Login />
-          </Route>
-          <Route path="/register" exact>
-            <Register />
-          </Route>
+        <Route path="/login">
+          <Login />
         </Route>
+        <Route path="/register">
+          <Register />
+        </Route>
+        <FastingContextProvider>
+          <PrivateRoute path="/">
+            <Dashboard />
+          </PrivateRoute>
+        </FastingContextProvider>
       </Switch>
     </Router>
   );
